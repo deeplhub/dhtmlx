@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dhtmlx.dao.SchedulerDAO">
+
+	<!-- 查询所有 -->
+	<select id="findAll" resultType="scheduler">
+		SELECT id, text, start_date,end_date, scheduler_type, warn_date FROM scheduler
+	</select>
+
+	<!-- 条件查询 -->
+	<select id="find" parameterType="int" resultType="scheduler">
+		SELECT id, text, start_date,end_date, scheduler_type, warn_date
+		FROM scheduler
+		WHERE id = #{param}
+	</select>
+
+	<!-- 更新 -->
+	<update id="update" parameterType="scheduler">
+		UPDATE scheduler
+		<set>
+			<if test="text != null">text = #{text},</if>
+			<if test="start_date != null">start_date = #{start_date},</if>
+			<if test="end_date != null">end_date = #{end_date},</if>
+			<if test="scheduler_type != null">scheduler_type = #{scheduler_type},</if>
+			<if test="warn_date != null">warn_date = #{warn_date},</if>
+		</set>
+		WHERE id = #{id}
+
+	</update>
+	
+	<!-- 添加 -->
+	<insert id="save" parameterType="scheduler">
+		INSERT INTO scheduler (text, start_date, end_date)
+		VALUES (#{text}, #{start_date}, #{end_date})
+		<selectKey keyProperty="id" resultType="int" order="AFTER">
+			select LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+	
+	<!-- 删除 -->
+	<delete id="delete"  parameterType="int">
+		DELETE FROM scheduler WHERE id=#{param}
+	</delete>
+	
+</mapper>

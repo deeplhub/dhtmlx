@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dhtmlx.dao.GanttLinkDAO">
+
+	<select id="findAll" resultType="ganttLink">
+		SELECT id, source, target, type FROM gantt_links
+	</select>
+
+	<select id="find" parameterType="int" resultType="ganttLink">
+		SELECT id, source, target, type
+		FROM gantt_links
+		WHERE id = #{valueOf}
+	</select>
+
+	<update id="update" parameterType="ganttLink">
+		UPDATE gantt_links
+		<set>
+			<if test="source != null">source = #{source},</if>
+			<if test="target != null">target = #{target},</if>
+			<if test="type != null">type = #{type},</if>
+		</set>
+		WHERE id = #{id}
+
+	</update>
+	
+	<insert id="save" parameterType="ganttLink">
+		INSERT INTO gantt_links (source, target, type)
+		VALUES (#{source}, #{target}, #{type})
+		<selectKey keyProperty="id" resultType="int" order="AFTER">
+			select LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+	
+	<delete id="delete"  parameterType="ganttLink">
+		DELETE FROM gantt_links WHERE id=#{id}
+	</delete>
+	
+</mapper>

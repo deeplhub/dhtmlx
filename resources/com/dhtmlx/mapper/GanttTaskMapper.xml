@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dhtmlx.dao.GanttTaskDAO">
+
+	<!-- 查询所有 -->
+	<select id="findAll" resultType="ganttTask">
+		SELECT id, text, start_date,
+		duration, progress, sortorder, parent FROM gantt_tasks
+	</select>
+
+	<!-- 条件查询 -->
+	<select id="find" parameterType="int" resultType="ganttTask">
+		SELECT id,
+		text, start_date, duration, progress, sortorder, parent
+		FROM gantt_tasks
+		WHERE id = #{valueOf}
+	</select>
+
+	<!-- 更新 -->
+	<update id="update" parameterType="ganttTask">
+		UPDATE gantt_tasks
+		<set>
+			<if test="text != null">text = #{text},</if>
+			<if test="start_date != null">start_date = #{start_date},</if>
+			<if test="duration != null">duration = #{duration},</if>
+			<if test="progress != null">progress = #{progress},</if>
+			<if test="sortorder != null">sortorder = #{sortorder},</if>
+			<if test="parent != null">parent = #{parent},</if>
+		</set>
+		WHERE id = #{id}
+
+	</update>
+	
+	<!-- 添加 -->
+	<insert id="save" parameterType="ganttTask">
+		INSERT INTO gantt_tasks (text, start_date, duration, progress, sortorder, parent)
+		VALUES (#{text}, #{start_date}, #{duration}, #{progress}, #{sortorder}, #{parent})
+		<selectKey keyProperty="id" resultType="int" order="AFTER">
+			select LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+	
+	<!-- 删除 -->
+	<delete id="delete"  parameterType="ganttTask">
+		DELETE FROM gantt_tasks WHERE id=#{id}
+	</delete>
+	
+</mapper>
